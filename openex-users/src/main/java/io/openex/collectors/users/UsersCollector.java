@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
 import java.time.Duration;
+import java.util.Optional;
 
 @Component
 public class UsersCollector {
@@ -37,7 +38,7 @@ public class UsersCollector {
     @PostConstruct
     public void init() {
         // If enabled, scheduled every 5 seconds
-        if (usersCollectorConfig.getEnable()) {
+        if (Optional.ofNullable(usersCollectorConfig.getEnable()).orElse(false)) {
             UsersCollectorService task = new UsersCollectorService(userRepository);
             taskScheduler.scheduleAtFixedRate(task, Duration.ofSeconds(5));
         }
